@@ -1,7 +1,9 @@
 
 # Canvas Sharing
 
-A Canvas Sharing System using socket.io
+A Canvas Sharing System using Socket.io
+[SocketIO on GitHub](https://github.com/Automattic/socket.io)
+[Website](http://socket.io/)
 
 ## How to use
 
@@ -22,5 +24,6 @@ a port by supplying the `PORT` env variable.
 - More basic shapes and dynamic drawing coming next.
 
 
-
+##License
+MIT	
 		
