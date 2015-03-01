@@ -1,11 +1,10 @@
 {
-  "name": "socket.io-chat",
-  "version": "0.0.0",
-  "description": "A simple chat client using socket.io",
+  "name": "Canvas Share",
+  "version": "0.0.1",
+  "description": "A shared Canvas using socket.io",
   "main": "index.js",
-  "author": "Grant Timmerman",
-  "private": true,
-  "license": "BSD",
+  "author": "Ranadip Saha",
+  "license": "MIT",
   "dependencies": {
     "express": "3.4.8",
     "socket.io": "~1.3.4"
