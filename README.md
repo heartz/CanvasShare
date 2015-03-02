@@ -23,6 +23,7 @@ a port by supplying the `PORT` env variable.
 - At this moment it is just a very crude version with only Straight Lines working
 - Added Circles and polygons
 - Added clear button
+- Added Square
 - More basic shapes and dynamic drawing coming next.
 
 

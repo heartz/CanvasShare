@@ -83,6 +83,28 @@ $(function() {
 			context.stroke();
 		}
 	}
+	//Function for Square
+	function drawSquare(x1,y1,x2,y2,sides,angle) {
+		var coordinates = [],
+		radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2)),
+		index = 0;
+		for (index = 0; index < sides; index++) {
+			coordinates.push({x: x1 + radius * Math.cos(angle+Math.PI/4), y: y1 - radius * Math.sin(angle+Math.PI/4)});
+			angle += Math.PI/2;
+		}
+		context.beginPath();
+		context.moveTo(coordinates[0].x, coordinates[0].y);
+		for (index = 1; index < sides; index++) {
+			context.lineTo(coordinates[index].x, coordinates[index].y);
+		}
+		context.closePath();
+		if(fillBox.checked){
+			context.fill();
+		}
+		else{
+			context.stroke();
+		}
+	}
 
 	// Sends the function parameters to the clients
 	function sending(x1,x2,y1,y2,sides,angle){
@@ -97,7 +119,7 @@ $(function() {
 		radiobutton1=document.getElementById("radiobutton1");
 		radiobutton2=document.getElementById("radiobutton2");
 		radiobutton3=document.getElementById("radiobutton3");
-		
+		radiobutton4=document.getElementById("radiobutton4");
 
 		var b =JSON.stringify(fillBox.checked)
 		socket.emit('fill',b);
@@ -115,6 +137,10 @@ $(function() {
 			a=sending(x1,x2,y1,y2,sides,angle);
 			socket.emit('polygon',a);
 		}
+		if(radiobutton4.checked==true){
+			a=sending(x1,x2,y1,y2,sides,angle);
+			socket.emit('square',a);
+		}
 	}
 	//To show currently drawn item
 	function currentDraw(x2,y2){
@@ -122,6 +148,7 @@ $(function() {
 		radiobutton1=document.getElementById("radiobutton1");
 		radiobutton2=document.getElementById("radiobutton2");
 		radiobutton3=document.getElementById("radiobutton3");
+		radiobutton4=document.getElementById("radiobutton4");
 
 		if(radiobutton1.checked ==true ){
 			drawLine(x1,y1,x2,y2);}
@@ -131,6 +158,9 @@ $(function() {
 		}
 		if(radiobutton3.checked==true){
 			drawPolygon(x1,y1,x2,y2,8,Math.PI/4);
+		}
+		if(radiobutton4.checked==true){
+			drawSquare(x1,y1,x2,y2,4,Math.PI/2);
 		}
 	}
 	function dragStart(event) {
@@ -188,6 +218,10 @@ $(function() {
 	socket.on('polygon',function(data){
 		var b=JSON.parse(data);
 		drawPolygon(b.x1,b.y1,b.x2,b.y2,8,Math.PI/4);
+	});
+	socket.on('square',function(data){
+		var b=JSON.parse(data);
+		drawSquare(b.x1,b.y1,b.x2,b.y2,4,Math.PI/2);
 	});
 
 	socket.on('fill',function(data){

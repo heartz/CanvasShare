@@ -29,7 +29,10 @@ io.on('connection', function (socket) {
 	//Polygon
 	socket.on('polygon', function (data) {
 		io.emit('polygon',data);
-
+	});
+	//Square
+	socket.on('square', function (data) {
+		io.emit('square',data);
 	});
 	//Clear
 	socket.on('clear', function () {
