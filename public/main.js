@@ -32,6 +32,9 @@ $(function() {
 
 	//Draw the line
 	function drawLine(x1,y1,x2,y2) {
+		var color_picker = $('#c_picker').val();
+		context.strokeStyle = '#'+color_picker;
+		context.fillStyle = '#'+color_picker;
 		context.beginPath();
 		context.moveTo(x1,y1);
 		context.lineTo(x2,y2);
@@ -47,9 +50,16 @@ $(function() {
 			fillBox.checked=false;
 		}
 	}
+	//Function to set color on changes
+	function colorSetter(color){
+		$('#c_picker').val(color);
+		console.log(color);
+	}
 	//Function for circle
 	function drawCircle(x1,y1,x2,y2) {
-
+		var color_picker = $('#c_picker').val();
+		context.strokeStyle = '#'+color_picker;
+		context.fillStyle = '#'+color_picker;
 		var radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
 		context.beginPath();
 		context.arc(x1, y1, radius, 0, 2 * Math.PI, false);
@@ -63,6 +73,9 @@ $(function() {
 	//Function for Polygon
 
 	function drawPolygon(x1,y1,x2,y2, sides, angle) {
+		var color_picker = $('#c_picker').val();
+		context.strokeStyle = '#'+color_picker;
+		context.fillStyle = '#'+color_picker;
 		var coordinates = [],
 		radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2)),
 		index = 0;
@@ -85,6 +98,9 @@ $(function() {
 	}
 	//Function for Square
 	function drawSquare(x1,y1,x2,y2,sides,angle) {
+		var color_picker = $('#c_picker').val();
+		context.strokeStyle = '#'+color_picker;
+		context.fillStyle = '#'+color_picker;
 		var coordinates = [],
 		radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2)),
 		index = 0;
@@ -123,6 +139,8 @@ $(function() {
 
 		var b =JSON.stringify(fillBox.checked)
 		socket.emit('fill',b);
+		var color_picker =JSON.stringify($('#c_picker').val())
+		socket.emit('color',color_picker);
 
 		if(radiobutton1.checked ==true ){
 			a=sending(x1,x2,y1,y2,sides,angle);
@@ -191,8 +209,9 @@ $(function() {
 	function init() {
 		canvas = document.getElementById("canvas");
 		context = canvas.getContext('2d');
-		context.strokeStyle = 'green';
-		context.fillStyle = '#00B0FF';
+		var color_picker = $('#c_picker').val();
+		context.strokeStyle = '#'+color_picker;
+		context.fillStyle = '#'+color_picker;
 		context.lineWidth = 4;
 		context.lineCap = 'round';
 		canvas.addEventListener('mousedown', dragStart, false);
@@ -223,7 +242,10 @@ $(function() {
 		var b=JSON.parse(data);
 		drawSquare(b.x1,b.y1,b.x2,b.y2,4,Math.PI/2);
 	});
-
+	socket.on('color',function(data){
+		var c=JSON.parse(data)
+		colorSetter(c);
+	});
 	socket.on('fill',function(data){
 		var c=JSON.parse(data)
 		fill(c);
