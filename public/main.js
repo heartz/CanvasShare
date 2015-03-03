@@ -53,7 +53,6 @@ $(function() {
 	//Function to set color on changes
 	function colorSetter(color){
 		$('#c_picker').val(color);
-		console.log(color);
 	}
 	//Function for circle
 	function drawCircle(x1,y1,x2,y2) {
