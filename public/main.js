@@ -122,11 +122,11 @@ $(function() {
 	}
 	// Main draw function that calls the other draw functions
 	function draw(x2,y2){
-		fillBox=document.getElementById("fillBox");
-		radiobutton1=document.getElementById("radiobutton1");
-		radiobutton2=document.getElementById("radiobutton2");
-		radiobutton3=document.getElementById("radiobutton3");
-		radiobutton4=document.getElementById("radiobutton4");
+		fillBox=$("#fillBox")[0];
+		radiobutton1=$("#radiobutton1")[0];
+		radiobutton2=$("#radiobutton2")[0];
+		radiobutton3=$("#radiobutton3")[0];
+		radiobutton4=$("#radiobutton4")[0];
 
 		var b =JSON.stringify(fillBox.checked)
 		socket.emit('fill',b);
@@ -153,11 +153,11 @@ $(function() {
 	}
 	//To show currently drawn item
 	function currentDraw(x2,y2){
-		fillBox=document.getElementById("fillBox");
-		radiobutton1=document.getElementById("radiobutton1");
-		radiobutton2=document.getElementById("radiobutton2");
-		radiobutton3=document.getElementById("radiobutton3");
-		radiobutton4=document.getElementById("radiobutton4");
+		fillBox=$("#fillBox")[0];
+		radiobutton1=$("#radiobutton1")[0];
+		radiobutton2=$("#radiobutton2")[0];
+		radiobutton3=$("#radiobutton3")[0];
+		radiobutton4=$("#radiobutton4")[0];
 
 		if(radiobutton1.checked ==true ){
 			drawLine(x1,y1,x2,y2);}
@@ -198,7 +198,7 @@ $(function() {
 		y2=position.y;
 	}
 	function init() {
-		canvas = document.getElementById("canvas");
+		canvas = $("#canvas")[0];
 		context = canvas.getContext('2d');
 		var color_picker = $('#c_picker').val();
 		context.strokeStyle = '#'+color_picker;
