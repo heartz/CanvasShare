@@ -8,14 +8,6 @@ $(function() {
 	x1,y1,
 	x2,y2,sides,angle;
 
-	function textbox1() {
-		var canvas = document.getElementById("e");
-		var context = canvas.getContext("2d");
-		context.fillStyle = "blue";
-	    context.font = "bold 16px Arial";
-	    context.fillText("Zibri", 100, 100);		
-	}
-	  
 	//Function to get Coordinates
 	function getCanvasCoordinates(event) {
 
