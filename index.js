@@ -30,10 +30,6 @@ io.on('connection', function (socket) {
 	socket.on('square', function (data) {
 		io.emit('square',data);
 	});
-	//Color
-	socket.on('color', function (data) {
-		io.emit('color',data);
-	});
 	//Clear
 	socket.on('clear', function () {
 		io.emit('clear');
