@@ -32,10 +32,6 @@ $(function() {
 		context.stroke();
 
 	}
-	//Function to set color on changes
-	/*function colorSetter(color){
-		$('#c_picker').val(color);
-	}*/
 	//Function for circle
 	function drawCircle(x1,y1,x2,y2,fill,color) {
 		context.strokeStyle = '#'+color;
@@ -190,9 +186,15 @@ $(function() {
 		canvas.addEventListener('mouseup', dragStop, false);
 	}
 	window.addEventListener('load', init, false);
+
+	// Sending Clear Instruction
+	
 	$("#clearer").click(function(){
 		socket.emit('clear');
 	});
+
+	// Recieving functions
+	
 	var socket=io();
 	socket.on('line',function(data){
 		var b=JSON.parse(data);
