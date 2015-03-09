@@ -14,9 +14,18 @@ $ cd CanvasShare/
 $ npm install
 $ node .
 ```
+## For Collaborated Version
 
+```
 And point your browser to `http://localhost:3000`. Optionally, specify
 a port by supplying the `PORT` env variable.
+```
+## For Server-Client Version
+```
+Point browser to `http://localhost:3000/server.html` on server.
+Point browser to `http://localhost:3000/client.html` on client.
+Optionally, specify a port by supplying the `PORT` env variable.
+```
 
 ## Features
 
