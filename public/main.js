@@ -33,28 +33,19 @@ $(function() {
 		context.stroke();
 
 	}
-	// Fill or not to fill
-	function fill(a){
-		if (a) {
-			fillBox.checked=true;
-		}
-		else{
-			fillBox.checked=false;
-		}
-	}
 	//Function to set color on changes
 	function colorSetter(color){
 		$('#c_picker').val(color);
 	}
 	//Function for circle
-	function drawCircle(x1,y1,x2,y2) {
+	function drawCircle(x1,y1,x2,y2,fill) {
 		var color_picker = $('#c_picker').val();
 		context.strokeStyle = '#'+color_picker;
 		context.fillStyle = '#'+color_picker;
 		var radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
 		context.beginPath();
 		context.arc(x1, y1, radius, 0, 2 * Math.PI, false);
-		if(fillBox.checked){
+		if(fill){
 			context.fill();
 		}
 		else{
@@ -63,7 +54,8 @@ $(function() {
 	}
 	//Function for Polygon
 
-	function drawPolygon(x1,y1,x2,y2, sides, angle) {
+	function drawPolygon(x1,y1,x2,y2, sides, angle,fill) {
+		
 		var color_picker = $('#c_picker').val();
 		context.strokeStyle = '#'+color_picker;
 		context.fillStyle = '#'+color_picker;
@@ -80,15 +72,16 @@ $(function() {
 			context.lineTo(coordinates[index].x, coordinates[index].y);
 		}
 		context.closePath();
-		if(fillBox.checked){
+		if(fill){
 			context.fill();
 		}
 		else{
 			context.stroke();
 		}
+
 	}
 	//Function for Square
-	function drawSquare(x1,y1,x2,y2,sides,angle) {
+	function drawSquare(x1,y1,x2,y2,sides,angle,fill) {
 		var color_picker = $('#c_picker').val();
 		context.strokeStyle = '#'+color_picker;
 		context.fillStyle = '#'+color_picker;
@@ -105,7 +98,7 @@ $(function() {
 			context.lineTo(coordinates[index].x, coordinates[index].y);
 		}
 		context.closePath();
-		if(fillBox.checked){
+		if(fill){
 			context.fill();
 		}
 		else{
@@ -114,8 +107,8 @@ $(function() {
 	}
 
 	// Sends the function parameters to the clients
-	function sending(x1,x2,y1,y2,sides,angle){
-		var prop={x1:x1,x2:x2,y1:y1,y2:y2,sides:sides,angle:angle};
+	function sending(x1,x2,y1,y2,sides,angle,fill){
+		var prop={x1:x1,x2:x2,y1:y1,y2:y2,sides:sides,angle:angle,fill:fill};
 		var a=JSON.stringify(prop);
 		return a;
 
@@ -127,27 +120,24 @@ $(function() {
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-
-		var b =JSON.stringify(fillBox.checked)
-		socket.emit('fill',b);
 		var color_picker =JSON.stringify($('#c_picker').val())
 		socket.emit('color',color_picker);
 
 		if(radiobutton1.checked ==true ){
-			a=sending(x1,x2,y1,y2,sides,angle);
+			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked);
 			socket.emit('line',a);
 
 		}
 		if(radiobutton2.checked==true){
-			a=sending(x1,x2,y1,y2,sides,angle);
+			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked);
 			socket.emit('circle',a);
 		}
 		if(radiobutton3.checked==true){
-			a=sending(x1,x2,y1,y2,sides,angle);
+			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked);
 			socket.emit('polygon',a);
 		}
 		if(radiobutton4.checked==true){
-			a=sending(x1,x2,y1,y2,sides,angle);
+			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked);
 			socket.emit('square',a);
 		}
 	}
@@ -158,18 +148,17 @@ $(function() {
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-
 		if(radiobutton1.checked ==true ){
-			drawLine(x1,y1,x2,y2);}
+			drawLine(x1,y1,x2,y2,fillBox.checked);}
 
 		if(radiobutton2.checked==true){
-			drawCircle(x1,y1,x2,y2)
+			drawCircle(x1,y1,x2,y2,fillBox.checked)
 		}
 		if(radiobutton3.checked==true){
-			drawPolygon(x1,y1,x2,y2,8,Math.PI/4);
+			drawPolygon(x1,y1,x2,y2,8,Math.PI/4,fillBox.checked);
 		}
 		if(radiobutton4.checked==true){
-			drawSquare(x1,y1,x2,y2,4,Math.PI/2);
+			drawSquare(x1,y1,x2,y2,4,Math.PI/2,fillBox.checked);
 		}
 	}
 	function dragStart(event) {
@@ -211,35 +200,30 @@ $(function() {
 	}
 	window.addEventListener('load', init, false);
 	$("#clearer").click(function(){
-		var fake = JSON.stringify('checker');
 		socket.emit('clear');
 	});
 	var socket=io();
 	socket.on('line',function(data){
 		var b=JSON.parse(data);
-		drawLine(b.x1,b.y1,b.x2,b.y2)
+		drawLine(b.x1,b.y1,b.x2,b.y2,b.fill)
 	});
 
 	socket.on('circle',function(data){
 		var b=JSON.parse(data);
-		drawCircle(b.x1,b.y1,b.x2,b.y2)
+		drawCircle(b.x1,b.y1,b.x2,b.y2,b.fill)
 	});
 
 	socket.on('polygon',function(data){
 		var b=JSON.parse(data);
-		drawPolygon(b.x1,b.y1,b.x2,b.y2,8,Math.PI/4);
+		drawPolygon(b.x1,b.y1,b.x2,b.y2,8,Math.PI/4,b.fill);
 	});
 	socket.on('square',function(data){
 		var b=JSON.parse(data);
-		drawSquare(b.x1,b.y1,b.x2,b.y2,4,Math.PI/2);
+		drawSquare(b.x1,b.y1,b.x2,b.y2,4,Math.PI/2,b.fill);
 	});
 	socket.on('color',function(data){
 		var c=JSON.parse(data)
 		colorSetter(c);
-	});
-	socket.on('fill',function(data){
-		var c=JSON.parse(data)
-		fill(c);
 	});
 	socket.on('clear',function(){
 		context.clearRect ( 0 , 0 , canvas.width, canvas.height );

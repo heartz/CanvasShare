@@ -17,10 +17,6 @@ io.on('connection', function (socket) {
 	socket.on('line', function (data) {
 		io.emit('line',data);
 	});
-	//Fill or empty
-	socket.on('fill',function(data){
-		io.emit('fill',data);
-	});
 	//Circle
 	socket.on('circle', function (data) {
 		io.emit('circle',data);
