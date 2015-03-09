@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Canvas Sharing - Server</title>
+		<link href="index.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<script type="text/javascript" src="jscolor/jscolor.js"></script>
+		<script src="server.js"></script>
+	</head>
+	<body>
+		<canvas id="canvas" width="1100" height="550"></canvas>
+		<div id="controls">
+			This is server end
+			<p><label>Fill: <input id="fillBox" type="checkbox" checked="checked"></label></p>
+			<label>Select your option</label>
+			<form >
+				Color:<input class="color" id="c_picker" value="000000"><br>
+				<input id="radiobutton1" type="radio"  name="buttonT" value="line" checked="checked">Line<br>
+				<input id="radiobutton2" type="radio"  name="buttonT" value="circle">Circle<br>
+				<input id="radiobutton3" type="radio" name="buttonT" value="polygon">Polygon<br>
+				<input id="radiobutton4" type="radio" name="buttonT" value="square">Square<br>
+			</form>
+			<button id="clearer">Clear</button>
+		</div>
+	</body>
+</html>
