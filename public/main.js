@@ -7,6 +7,11 @@ $(function() {
 	snapshot,
 	x1,y1,
 	x2,y2,sides,angle;
+	var clickX = new Array();
+	var clickY = new Array();
+	var paint;
+	var mouseX;
+	var mouseY;
 
 	//Function to get Coordinates
 	function getCanvasCoordinates(event) {
@@ -97,6 +102,25 @@ $(function() {
 		}
 	}
 
+	function addClick(x, y, dragging){
+		clickX.push(x);
+		clickY.push(y);
+	}
+	function redraw(color){
+		context.strokeStyle = "#"+color;
+		for(var i=0; i < clickX.length; i++) {		
+			context.beginPath();
+			if(i){
+			    context.moveTo(clickX[i-1], clickY[i-1]);
+			}
+			else{
+			    context.moveTo(clickX[i]-1, clickY[i]);
+			}
+		context.lineTo(clickX[i], clickY[i]);
+		context.closePath();
+		context.stroke();
+		}
+	}
 	// Sends the function parameters to the clients
 	function sending(x1,x2,y1,y2,sides,angle,fill,color){
 		var prop={x1:x1,x2:x2,y1:y1,y2:y2,sides:sides,angle:angle,fill:fill,color:color};
@@ -130,6 +154,13 @@ $(function() {
 			socket.emit('square',a);
 		}
 	}
+	$('#canvas').mouseleave(function(e){
+  		paint = false;
+  		clickX = new Array();
+		clickY = new Array();
+		var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
+		socket.emit('dynamic',dynamic_array);
+	});
 	//To show currently drawn item
 	function currentDraw(x2,y2){
 		fillBox=$("#fillBox")[0];
@@ -152,29 +183,57 @@ $(function() {
 		}
 	}
 	function dragStart(event) {
-		dragging = true;
-		dragStartLocation = getCanvasCoordinates(event);
-		takeSnapshot();
-		x1=dragStartLocation.x;
-		y1=dragStartLocation.y;
+		if(radiobutton5.checked==true){
+				dragStartLocation = getCanvasCoordinates(event);
+				paint = true;
+				addClick(dragStartLocation.x, dragStartLocation.y);
+				var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
+				socket.emit('dynamic',dynamic_array);
+		}
+		else{
+			dragging = true;
+			dragStartLocation = getCanvasCoordinates(event);
+			takeSnapshot();
+			x1=dragStartLocation.x;
+			y1=dragStartLocation.y;
+		}
 	}
 	function drag(event) {
-		var position;
-		if (dragging === true) {
-			restoreSnapshot();
-			position = getCanvasCoordinates(event);
-			x2=position.x;
-			y2=position.y;
-			currentDraw(x2,y2);
+		if(radiobutton5.checked==true){
+			if(paint){
+			    dragStartLocation = getCanvasCoordinates(event);
+			    addClick(dragStartLocation.x, dragStartLocation.y);
+				var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
+				socket.emit('dynamic',dynamic_array);
+			  }
+			}
+		else{
+			var position;
+			if (dragging === true) {
+				restoreSnapshot();
+				position = getCanvasCoordinates(event);
+				x2=position.x;
+				y2=position.y;
+				currentDraw(x2,y2);
+			}
 		}
 	}
 	function dragStop(event) {
-		dragging = false;
-		restoreSnapshot();
-		var position = getCanvasCoordinates(event);
-		draw(x2,y2);
-		x2=position.x;
-		y2=position.y;
+		if(radiobutton5.checked==true){
+			paint = false;
+			clickX = new Array();
+			clickY = new Array();
+			var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
+			socket.emit('dynamic',dynamic_array);
+		}
+		else{
+			dragging = false;
+			restoreSnapshot();
+			var position = getCanvasCoordinates(event);
+			draw(x2,y2);
+			x2=position.x;
+			y2=position.y;
+		}
 	}
 	function init() {
 		canvas = $("#canvas")[0];
@@ -191,6 +250,8 @@ $(function() {
 	
 	$("#clearer").click(function(){
 		socket.emit('clear');
+		clickX = new Array();
+		clickY = new Array();
 	});
 
 	// Recieving functions
@@ -213,6 +274,13 @@ $(function() {
 	socket.on('square',function(data){
 		var b=JSON.parse(data);
 		drawSquare(b.x1,b.y1,b.x2,b.y2,4,Math.PI/2,b.fill,b.color);
+	});
+	socket.on('dynamic',function(data){
+		var dynamic_recieve=JSON.parse(data);
+		clickX=dynamic_recieve.x;
+		clickY=dynamic_recieve.y;
+		color=dynamic_recieve.color;
+		redraw(color);
 	});
 	socket.on('clear',function(){
 		context.clearRect ( 0 , 0 , canvas.width, canvas.height );

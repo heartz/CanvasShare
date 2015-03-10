@@ -30,6 +30,10 @@ io.on('connection', function (socket) {
 	socket.on('square', function (data) {
 		io.emit('square',data);
 	});
+	//Dynamic
+	socket.on('dynamic', function (data) {
+		io.emit('dynamic',data);
+	});
 	//Clear
 	socket.on('clear', function () {
 		io.emit('clear');
