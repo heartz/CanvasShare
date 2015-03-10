@@ -34,7 +34,13 @@ Optionally, specify a port by supplying the `PORT` env variable.
 - Added clear button
 - Added Square
 - Added Color picker
+- Added Dynamic drawing
 - More basic shapes and dynamic drawing coming next.
+
+###Bugs
+
+Dynamic drawing isn't working as intended on Firefox.
+Recieving works fine, sending redundant junk data.
 
 
 ##License
