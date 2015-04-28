@@ -1,6 +1,10 @@
 {
   "name": "CanvasShare",
   "version": "0.0.1",
+  "repository": {
+  "type": "git",
+  "url": " https://github.com/heartz/CanvasShare.git"
+  },
   "description": "A shared Canvas using socket.io",
   "main": "index.js",
   "author": "Ranadip Saha",
