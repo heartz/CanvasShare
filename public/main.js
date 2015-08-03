@@ -5,8 +5,8 @@ $(function() {
 	dragging = false,
 	dragStartLocation,
 	snapshot,
-	x1,y1,
-	x2,y2,sides,angle;
+	sides,
+	angle;
 	var clickX = new Array();
 	var clickY = new Array();
 	var paint;
@@ -129,7 +129,7 @@ $(function() {
 
 	}
 	// Main draw function that calls the other draw functions
-	function draw(x2,y2){
+	function draw(x1,y1,x2,y2){
 		fillBox=$("#fillBox")[0];
 		radiobutton1=$("#radiobutton1")[0];
 		radiobutton2=$("#radiobutton2")[0];
@@ -162,7 +162,7 @@ $(function() {
 		socket.emit('dynamic',dynamic_array);
 	});
 	//To show currently drawn item
-	function currentDraw(x2,y2){
+	function currentDraw(x1,y1,x2,y2){
 		fillBox=$("#fillBox")[0];
 		radiobutton1=$("#radiobutton1")[0];
 		radiobutton2=$("#radiobutton2")[0];
@@ -214,7 +214,7 @@ $(function() {
 				position = getCanvasCoordinates(event);
 				x2=position.x;
 				y2=position.y;
-				currentDraw(x2,y2);
+				currentDraw(x1,y1,x2,y2);
 			}
 		}
 	}
@@ -230,9 +230,9 @@ $(function() {
 			dragging = false;
 			restoreSnapshot();
 			var position = getCanvasCoordinates(event);
-			draw(x2,y2);
 			x2=position.x;
 			y2=position.y;
+			draw(x1,y1,x2,y2);
 		}
 	}
 	function init() {
