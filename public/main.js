@@ -10,8 +10,6 @@ $(function() {
 	var clickX = new Array();
 	var clickY = new Array();
 	var paint;
-	var mouseX;
-	var mouseY;
 
 	//Function to get Coordinates
 	function getCanvasCoordinates(event) {
@@ -20,9 +18,15 @@ $(function() {
 		y = event.clientY - canvas.getBoundingClientRect().top;
 		return {x: x, y: y};
 	}
+
+
+	// Saves current status of the canvas
 	function takeSnapshot() {
 		snapshot = context.getImageData(0, 0, canvas.width, canvas.height);
 	}
+
+
+	// Restores the previous status of the canvas
 	function restoreSnapshot() {
 		context.putImageData(snapshot, 0, 0);
 	} 
@@ -35,8 +39,8 @@ $(function() {
 		context.moveTo(x1,y1);
 		context.lineTo(x2,y2);
 		context.stroke();
-
 	}
+
 	//Function for circle
 	function drawCircle(x1,y1,x2,y2,fill,color) {
 		context.strokeStyle = '#'+color;
@@ -51,8 +55,8 @@ $(function() {
 			context.stroke();
 		}
 	}
-	//Function for Polygon
 
+	//Function for Polygon
 	function drawPolygon(x1,y1,x2,y2, sides, angle,fill,color) {
 		context.strokeStyle = '#'+color;
 		context.fillStyle = '#'+color;
@@ -77,6 +81,7 @@ $(function() {
 		}
 
 	}
+
 	//Function for Square
 	function drawSquare(x1,y1,x2,y2,sides,angle,fill,color) {
 		context.strokeStyle = '#'+color;
@@ -102,10 +107,13 @@ $(function() {
 		}
 	}
 
+	//Adding each pixel of dynamic drawing the array
 	function addClick(x, y, dragging){
 		clickX.push(x);
 		clickY.push(y);
 	}
+
+	// Drawing the dynamic array recieved
 	function redraw(color){
 		context.strokeStyle = "#"+color;
 		for(var i=0; i < clickX.length; i++) {		
@@ -120,14 +128,35 @@ $(function() {
 		context.closePath();
 		context.stroke();
 		}
+		paint = false;
+  		clickX = new Array();
+		clickY = new Array();
 	}
+
+	// Drawing the dynamic array on current Canvas
+	function redrawCurrent(color){
+		context.strokeStyle = "#"+color;
+		for(var i=0; i < clickX.length; i++) {		
+			context.beginPath();
+			if(i){
+			    context.moveTo(clickX[i-1], clickY[i-1]);
+			}
+			else{
+			    context.moveTo(clickX[i]-1, clickY[i]);
+			}
+		context.lineTo(clickX[i], clickY[i]);
+		context.closePath();
+		context.stroke();
+		}
+	}
+
 	// Sends the function parameters to the clients
 	function sending(x1,x2,y1,y2,sides,angle,fill,color){
 		var prop={x1:x1,x2:x2,y1:y1,y2:y2,sides:sides,angle:angle,fill:fill,color:color};
 		var a=JSON.stringify(prop);
 		return a;
-
 	}
+
 	// Main draw function that calls the other draw functions
 	function draw(x1,y1,x2,y2){
 		fillBox=$("#fillBox")[0];
@@ -154,13 +183,16 @@ $(function() {
 			socket.emit('square',a);
 		}
 	}
+
+	// Turn off drawing if mouse leaves the Canvas
 	$('#canvas').mouseleave(function(e){
   		paint = false;
-  		clickX = new Array();
-		clickY = new Array();
-		var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
+  		var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
 		socket.emit('dynamic',dynamic_array);
-	});
+  		clickX = new Array();
+		clickY = new Array();	
+	})
+
 	//To show currently drawn item
 	function currentDraw(x1,y1,x2,y2){
 		fillBox=$("#fillBox")[0];
@@ -182,13 +214,13 @@ $(function() {
 			drawSquare(x1,y1,x2,y2,4,Math.PI/2,fillBox.checked,color);
 		}
 	}
+
+	//Starts the dragging, Saves starting x and y coordinates as well
 	function dragStart(event) {
 		if(radiobutton5.checked==true){
 				dragStartLocation = getCanvasCoordinates(event);
 				paint = true;
 				addClick(dragStartLocation.x, dragStartLocation.y);
-				var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
-				socket.emit('dynamic',dynamic_array);
 		}
 		else{
 			dragging = true;
@@ -198,13 +230,14 @@ $(function() {
 			y1=dragStartLocation.y;
 		}
 	}
+
+	// Callback for  mouse dragging
 	function drag(event) {
 		if(radiobutton5.checked==true){
 			if(paint){
 			    dragStartLocation = getCanvasCoordinates(event);
 			    addClick(dragStartLocation.x, dragStartLocation.y);
-				var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
-				socket.emit('dynamic',dynamic_array);
+			    redrawCurrent($('#c_picker').val());
 			  }
 			}
 		else{
@@ -218,13 +251,16 @@ $(function() {
 			}
 		}
 	}
+
+	// Callback when mouse drag is stopped, sets ending x,y coordinates and sends data to server
 	function dragStop(event) {
 		if(radiobutton5.checked==true){
 			paint = false;
-			clickX = new Array();
-			clickY = new Array();
 			var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
 			socket.emit('dynamic',dynamic_array);
+			clickX = new Array();
+			clickY = new Array();
+			
 		}
 		else{
 			dragging = false;
@@ -235,6 +271,8 @@ $(function() {
 			draw(x1,y1,x2,y2);
 		}
 	}
+
+	// Initializes the Canvas and sets up event listeners
 	function init() {
 		canvas = $("#canvas")[0];
 		context = canvas.getContext('2d');
