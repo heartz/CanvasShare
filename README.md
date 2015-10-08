@@ -17,7 +17,7 @@ A Canvas Sharing System using Socket.io
 ```
 $ cd CanvasShare/
 $ npm install
-$ node .
+$ grunt serve
 ```
 ## For Collaborated Version
 
