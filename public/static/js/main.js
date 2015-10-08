@@ -7,8 +7,8 @@ $(function() {
 	snapshot,
 	sides,
 	angle;
-	var clickX = new Array();
-	var clickY = new Array();
+	var clickX = [];
+	var clickY = [];
 	var paint;
 
 	//Function to get Coordinates
@@ -129,8 +129,8 @@ $(function() {
 		context.stroke();
 		}
 		paint = false;
-  		clickX = new Array();
-		clickY = new Array();
+  		clickX = [];
+		clickY = [];
 	}
 
 	// Drawing the dynamic array on current Canvas
@@ -164,21 +164,21 @@ $(function() {
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-		var color=$('#c_picker').val()
-		if(radiobutton1.checked ==true ){
+		var color=$('#c_picker').val();
+		if(radiobutton1.checked === true ){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('line',a);
 
 		}
-		if(radiobutton2.checked==true){
+		if(radiobutton2.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('circle',a);
 		}
-		if(radiobutton3.checked==true){
+		if(radiobutton3.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('polygon',a);
 		}
-		if(radiobutton4.checked==true){
+		if(radiobutton4.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('square',a);
 		}
@@ -189,9 +189,9 @@ $(function() {
   		paint = false;
   		var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
 		socket.emit('dynamic',dynamic_array);
-  		clickX = new Array();
-		clickY = new Array();	
-	})
+  		clickX = [];
+		clickY = [];	
+	});
 
 	//To show currently drawn item
 	function currentDraw(x1,y1,x2,y2){
@@ -200,24 +200,24 @@ $(function() {
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-		var color =$('#c_picker').val()
-		if(radiobutton1.checked ==true ){
+		var color =$('#c_picker').val();
+		if(radiobutton1.checked === true ){
 			drawLine(x1,y1,x2,y2,fillBox.checked,color);}
 
-		if(radiobutton2.checked==true){
-			drawCircle(x1,y1,x2,y2,fillBox.checked,color)
+		if(radiobutton2.checked === true){
+			drawCircle(x1,y1,x2,y2,fillBox.checked,color);
 		}
-		if(radiobutton3.checked==true){
+		if(radiobutton3.checked === true){
 			drawPolygon(x1,y1,x2,y2,8,Math.PI/4,fillBox.checked,color);
 		}
-		if(radiobutton4.checked==true){
+		if(radiobutton4.checked === true){
 			drawSquare(x1,y1,x2,y2,4,Math.PI/2,fillBox.checked,color);
 		}
 	}
 
 	//Starts the dragging, Saves starting x and y coordinates as well
 	function dragStart(event) {
-		if(radiobutton5.checked==true){
+		if(radiobutton5.checked === true){
 				dragStartLocation = getCanvasCoordinates(event);
 				paint = true;
 				addClick(dragStartLocation.x, dragStartLocation.y);
@@ -233,7 +233,7 @@ $(function() {
 
 	// Callback for  mouse dragging
 	function drag(event) {
-		if(radiobutton5.checked==true){
+		if(radiobutton5.checked === true){
 			if(paint){
 			    dragStartLocation = getCanvasCoordinates(event);
 			    addClick(dragStartLocation.x, dragStartLocation.y);
@@ -254,12 +254,12 @@ $(function() {
 
 	// Callback when mouse drag is stopped, sets ending x,y coordinates and sends data to server
 	function dragStop(event) {
-		if(radiobutton5.checked==true){
+		if(radiobutton5.checked === true){
 			paint = false;
 			var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
 			socket.emit('dynamic',dynamic_array);
-			clickX = new Array();
-			clickY = new Array();
+			clickX = [];
+			clickY = [];
 			
 		}
 		else{
@@ -288,8 +288,8 @@ $(function() {
 	
 	$("#clearer").click(function(){
 		socket.emit('clear');
-		clickX = new Array();
-		clickY = new Array();
+		clickX = [];
+		clickY = [];
 	});
 
 	// Recieving functions
@@ -297,12 +297,12 @@ $(function() {
 	var socket=io();
 	socket.on('line',function(data){
 		var b=JSON.parse(data);
-		drawLine(b.x1,b.y1,b.x2,b.y2,b.fill,b.color)
+		drawLine(b.x1,b.y1,b.x2,b.y2,b.fill,b.color);
 	});
 
 	socket.on('circle',function(data){
 		var b=JSON.parse(data);
-		drawCircle(b.x1,b.y1,b.x2,b.y2,b.fill,b.color)
+		drawCircle(b.x1,b.y1,b.x2,b.y2,b.fill,b.color);
 	});
 
 	socket.on('polygon',function(data){

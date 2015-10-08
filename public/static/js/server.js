@@ -111,21 +111,21 @@ $(function() {
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-		var color=$('#c_picker').val()
-		if(radiobutton1.checked ==true ){
+		var color=$('#c_picker').val();
+		if(radiobutton1.checked === true ){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('line',a);
 
 		}
-		if(radiobutton2.checked==true){
+		if(radiobutton2.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('circle',a);
 		}
-		if(radiobutton3.checked==true){
+		if(radiobutton3.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('polygon',a);
 		}
-		if(radiobutton4.checked==true){
+		if(radiobutton4.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('square',a);
 		}
@@ -137,17 +137,17 @@ $(function() {
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-		var color =$('#c_picker').val()
-		if(radiobutton1.checked ==true ){
+		var color =$('#c_picker').val();
+		if(radiobutton1.checked === true ){
 			drawLine(x1,y1,x2,y2,fillBox.checked,color);}
 
-		if(radiobutton2.checked==true){
-			drawCircle(x1,y1,x2,y2,fillBox.checked,color)
+		if(radiobutton2.checked === true){
+			drawCircle(x1,y1,x2,y2,fillBox.checked,color);
 		}
-		if(radiobutton3.checked==true){
+		if(radiobutton3.checked === true){
 			drawPolygon(x1,y1,x2,y2,8,Math.PI/4,fillBox.checked,color);
 		}
-		if(radiobutton4.checked==true){
+		if(radiobutton4.checked === true){
 			drawSquare(x1,y1,x2,y2,4,Math.PI/2,fillBox.checked,color);
 		}
 	}
