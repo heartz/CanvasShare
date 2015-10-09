@@ -3,14 +3,19 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Canvas Sharing - Client</title>
-		<link href="index.css" rel="stylesheet">
-		<script src="jquery.min.js"></script>
-		<script src="socket.js"></script>
-		<script type="text/javascript" src="jscolor/jscolor.js"></script>
-		<script src="client.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" 
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link href="dist/css/CanvasShare.min.css" rel="stylesheet">
+		<script type="text/javascript" src="vendor/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="vendor/socket/socket.js"></script>
+		<script type="text/javascript" src="vendor/jscolor/jscolor.js"></script>
+		<script type="text/javascript" src="dist/js/client.min.js"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 	<body>
-		<canvas id="canvas" width="1100" height="550"></canvas>
-		<div id="controls"> This is the client end</div>
+		<canvas class ="well" id="canvas" width="1100" height="550"></canvas>
+		<div id="controls"><label  class="alert alert-success">Client side Tool</label></div>
 	</body>
 </html>

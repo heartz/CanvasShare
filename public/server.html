@@ -3,25 +3,31 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Canvas Sharing - Server</title>
-		<link href="index.css" rel="stylesheet">
-		<script src="jquery.min.js"></script>
-		<script src="socket.js"></script>
-		<script type="text/javascript" src="jscolor/jscolor.js"></script>
-		<script src="server.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" 
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link href="dist/css/CanvasShare.min.css" rel="stylesheet">
+		<script type="text/javascript" src="vendor/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="vendor/socket/socket.js"></script>
+		<script type="text/javascript" src="vendor/jscolor/jscolor.js"></script>
+		<script type="text/javascript" src="dist/js/server.min.js"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 	<body>
-		<canvas id="canvas" width="1100" height="550"></canvas>
+		<canvas id="canvas" class="well" width="1100" height="550"></canvas>
 		<div id="controls">
-			This is server end
-			<p><label>Fill: <input id="fillBox" type="checkbox" checked="checked"></label></p>
-			<label>Select your option</label>
+			<label class="alert alert-success">Server side Tool</label>
+			<p><label>Drawing Tools</label></p>
 			<form >
-				Color:<input class="color" id="c_picker" value="000000"><br>
 				<input id="radiobutton1" type="radio"  name="buttonT" value="line" checked="checked">Line<br>
 				<input id="radiobutton2" type="radio"  name="buttonT" value="circle">Circle<br>
 				<input id="radiobutton3" type="radio" name="buttonT" value="polygon">Polygon<br>
 				<input id="radiobutton4" type="radio" name="buttonT" value="square">Square<br>
+				<input id="radiobutton5" type="radio" name="buttonT" value="dynamic">Dynamic<br><br>
+				<p><label>Color : <input class="color" id="c_picker" value="000000"><br></label></p>
 			</form>
+			<p><label>Fill : <input id="fillBox" type="checkbox" checked="checked"></label></p>
 			<button id="clearer">Clear</button>
 		</div>
 	</body>

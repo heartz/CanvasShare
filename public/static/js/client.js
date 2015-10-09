@@ -109,12 +109,12 @@ $(function() {
 	var socket=io();
 	socket.on('line',function(data){
 		var b=JSON.parse(data);
-		drawLine(b.x1,b.y1,b.x2,b.y2,b.fill,b.color)
+		drawLine(b.x1,b.y1,b.x2,b.y2,b.fill,b.color);
 	});
 
 	socket.on('circle',function(data){
 		var b=JSON.parse(data);
-		drawCircle(b.x1,b.y1,b.x2,b.y2,b.fill,b.color)
+		drawCircle(b.x1,b.y1,b.x2,b.y2,b.fill,b.color);
 	});
 
 	socket.on('polygon',function(data){

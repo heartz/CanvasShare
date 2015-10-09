@@ -12,8 +12,8 @@ canvas{
 #controls{
 	position: absolute;
 	top: 10px;
-	left:5px;
 	padding:20px;
+	left: 5px;
 	border: 1px solid gray;
 	background-color: lightskyblue;
 	border-radius: 10px;

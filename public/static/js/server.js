@@ -5,11 +5,8 @@ $(function() {
 	dragging = false,
 	dragStartLocation,
 	snapshot,
-	sides,
-	angle;
-	var clickX = new Array();
-	var clickY = new Array();
-	var paint;
+	x1,y1,
+	x2,y2,sides,angle;
 
 	//Function to get Coordinates
 	function getCanvasCoordinates(event) {
@@ -18,15 +15,9 @@ $(function() {
 		y = event.clientY - canvas.getBoundingClientRect().top;
 		return {x: x, y: y};
 	}
-
-
-	// Saves current status of the canvas
 	function takeSnapshot() {
 		snapshot = context.getImageData(0, 0, canvas.width, canvas.height);
 	}
-
-
-	// Restores the previous status of the canvas
 	function restoreSnapshot() {
 		context.putImageData(snapshot, 0, 0);
 	} 
@@ -39,8 +30,8 @@ $(function() {
 		context.moveTo(x1,y1);
 		context.lineTo(x2,y2);
 		context.stroke();
-	}
 
+	}
 	//Function for circle
 	function drawCircle(x1,y1,x2,y2,fill,color) {
 		context.strokeStyle = '#'+color;
@@ -55,8 +46,8 @@ $(function() {
 			context.stroke();
 		}
 	}
-
 	//Function for Polygon
+
 	function drawPolygon(x1,y1,x2,y2, sides, angle,fill,color) {
 		context.strokeStyle = '#'+color;
 		context.fillStyle = '#'+color;
@@ -81,7 +72,6 @@ $(function() {
 		}
 
 	}
-
 	//Function for Square
 	function drawSquare(x1,y1,x2,y2,sides,angle,fill,color) {
 		context.strokeStyle = '#'+color;
@@ -107,172 +97,86 @@ $(function() {
 		}
 	}
 
-	//Adding each pixel of dynamic drawing the array
-	function addClick(x, y, dragging){
-		clickX.push(x);
-		clickY.push(y);
-	}
-
-	// Drawing the dynamic array recieved
-	function redraw(color){
-		context.strokeStyle = "#"+color;
-		for(var i=0; i < clickX.length; i++) {		
-			context.beginPath();
-			if(i){
-			    context.moveTo(clickX[i-1], clickY[i-1]);
-			}
-			else{
-			    context.moveTo(clickX[i]-1, clickY[i]);
-			}
-		context.lineTo(clickX[i], clickY[i]);
-		context.closePath();
-		context.stroke();
-		}
-		paint = false;
-  		clickX = new Array();
-		clickY = new Array();
-	}
-
-	// Drawing the dynamic array on current Canvas
-	function redrawCurrent(color){
-		context.strokeStyle = "#"+color;
-		for(var i=0; i < clickX.length; i++) {		
-			context.beginPath();
-			if(i){
-			    context.moveTo(clickX[i-1], clickY[i-1]);
-			}
-			else{
-			    context.moveTo(clickX[i]-1, clickY[i]);
-			}
-		context.lineTo(clickX[i], clickY[i]);
-		context.closePath();
-		context.stroke();
-		}
-	}
-
 	// Sends the function parameters to the clients
 	function sending(x1,x2,y1,y2,sides,angle,fill,color){
 		var prop={x1:x1,x2:x2,y1:y1,y2:y2,sides:sides,angle:angle,fill:fill,color:color};
 		var a=JSON.stringify(prop);
 		return a;
-	}
 
+	}
 	// Main draw function that calls the other draw functions
-	function draw(x1,y1,x2,y2){
+	function draw(x2,y2){
 		fillBox=$("#fillBox")[0];
 		radiobutton1=$("#radiobutton1")[0];
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-		var color=$('#c_picker').val()
-		if(radiobutton1.checked ==true ){
+		var color=$('#c_picker').val();
+		if(radiobutton1.checked === true ){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('line',a);
 
 		}
-		if(radiobutton2.checked==true){
+		if(radiobutton2.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('circle',a);
 		}
-		if(radiobutton3.checked==true){
+		if(radiobutton3.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('polygon',a);
 		}
-		if(radiobutton4.checked==true){
+		if(radiobutton4.checked === true){
 			a=sending(x1,x2,y1,y2,sides,angle,fillBox.checked,color);
 			socket.emit('square',a);
 		}
 	}
-
-	// Turn off drawing if mouse leaves the Canvas
-	$('#canvas').mouseleave(function(e){
-  		paint = false;
-  		var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
-		socket.emit('dynamic',dynamic_array);
-  		clickX = new Array();
-		clickY = new Array();	
-	})
-
 	//To show currently drawn item
-	function currentDraw(x1,y1,x2,y2){
+	function currentDraw(x2,y2){
 		fillBox=$("#fillBox")[0];
 		radiobutton1=$("#radiobutton1")[0];
 		radiobutton2=$("#radiobutton2")[0];
 		radiobutton3=$("#radiobutton3")[0];
 		radiobutton4=$("#radiobutton4")[0];
-		var color =$('#c_picker').val()
-		if(radiobutton1.checked ==true ){
+		var color =$('#c_picker').val();
+		if(radiobutton1.checked === true ){
 			drawLine(x1,y1,x2,y2,fillBox.checked,color);}
 
-		if(radiobutton2.checked==true){
-			drawCircle(x1,y1,x2,y2,fillBox.checked,color)
+		if(radiobutton2.checked === true){
+			drawCircle(x1,y1,x2,y2,fillBox.checked,color);
 		}
-		if(radiobutton3.checked==true){
+		if(radiobutton3.checked === true){
 			drawPolygon(x1,y1,x2,y2,8,Math.PI/4,fillBox.checked,color);
 		}
-		if(radiobutton4.checked==true){
+		if(radiobutton4.checked === true){
 			drawSquare(x1,y1,x2,y2,4,Math.PI/2,fillBox.checked,color);
 		}
 	}
-
-	//Starts the dragging, Saves starting x and y coordinates as well
 	function dragStart(event) {
-		if(radiobutton5.checked==true){
-				dragStartLocation = getCanvasCoordinates(event);
-				paint = true;
-				addClick(dragStartLocation.x, dragStartLocation.y);
-		}
-		else{
-			dragging = true;
-			dragStartLocation = getCanvasCoordinates(event);
-			takeSnapshot();
-			x1=dragStartLocation.x;
-			y1=dragStartLocation.y;
-		}
+		dragging = true;
+		dragStartLocation = getCanvasCoordinates(event);
+		takeSnapshot();
+		x1=dragStartLocation.x;
+		y1=dragStartLocation.y;
 	}
-
-	// Callback for  mouse dragging
 	function drag(event) {
-		if(radiobutton5.checked==true){
-			if(paint){
-			    dragStartLocation = getCanvasCoordinates(event);
-			    addClick(dragStartLocation.x, dragStartLocation.y);
-			    redrawCurrent($('#c_picker').val());
-			  }
-			}
-		else{
-			var position;
-			if (dragging === true) {
-				restoreSnapshot();
-				position = getCanvasCoordinates(event);
-				x2=position.x;
-				y2=position.y;
-				currentDraw(x1,y1,x2,y2);
-			}
-		}
-	}
-
-	// Callback when mouse drag is stopped, sets ending x,y coordinates and sends data to server
-	function dragStop(event) {
-		if(radiobutton5.checked==true){
-			paint = false;
-			var dynamic_array =JSON.stringify({x:clickX,y:clickY,color:$('#c_picker').val()});
-			socket.emit('dynamic',dynamic_array);
-			clickX = new Array();
-			clickY = new Array();
-			
-		}
-		else{
-			dragging = false;
+		var position;
+		if (dragging === true) {
 			restoreSnapshot();
-			var position = getCanvasCoordinates(event);
+			position = getCanvasCoordinates(event);
 			x2=position.x;
 			y2=position.y;
-			draw(x1,y1,x2,y2);
+			currentDraw(x2,y2);
 		}
 	}
-
-	// Initializes the Canvas and sets up event listeners
+	function dragStop(event) {
+		dragging = false;
+		restoreSnapshot();
+		var position = getCanvasCoordinates(event);
+		draw(x2,y2);
+		currentDraw(x2,y2);
+		x2=position.x;
+		y2=position.y;
+	}
 	function init() {
 		canvas = $("#canvas")[0];
 		context = canvas.getContext('2d');
@@ -284,43 +188,10 @@ $(function() {
 	}
 	window.addEventListener('load', init, false);
 
-	// Sending Clear Instruction
-	
 	$("#clearer").click(function(){
+		context.clearRect ( 0 , 0 , canvas.width, canvas.height );
 		socket.emit('clear');
-		clickX = new Array();
-		clickY = new Array();
 	});
-
-	// Recieving functions
 	
 	var socket=io();
-	socket.on('line',function(data){
-		var b=JSON.parse(data);
-		drawLine(b.x1,b.y1,b.x2,b.y2,b.fill,b.color)
-	});
-
-	socket.on('circle',function(data){
-		var b=JSON.parse(data);
-		drawCircle(b.x1,b.y1,b.x2,b.y2,b.fill,b.color)
-	});
-
-	socket.on('polygon',function(data){
-		var b=JSON.parse(data);
-		drawPolygon(b.x1,b.y1,b.x2,b.y2,8,Math.PI/4,b.fill,b.color);
-	});
-	socket.on('square',function(data){
-		var b=JSON.parse(data);
-		drawSquare(b.x1,b.y1,b.x2,b.y2,4,Math.PI/2,b.fill,b.color);
-	});
-	socket.on('dynamic',function(data){
-		var dynamic_recieve=JSON.parse(data);
-		clickX=dynamic_recieve.x;
-		clickY=dynamic_recieve.y;
-		color=dynamic_recieve.color;
-		redraw(color);
-	});
-	socket.on('clear',function(){
-		context.clearRect ( 0 , 0 , canvas.width, canvas.height );
-	});
 });
