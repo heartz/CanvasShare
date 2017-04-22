@@ -1,3 +1,4 @@
+# React Version - Work in Progress
 
 # Canvas Sharing
 
@@ -17,20 +18,12 @@ A Canvas Sharing System using Socket.io
 ```
 $ cd CanvasShare/
 $ npm install
-$ grunt serve
+$ sh start_server
 ```
 ## For Collaborated Version
 
 And point your browser to `http://localhost:3000`. Optionally, specify
 a port by supplying the `PORT` env variable.
-
-
-## For Server-Client Version
-
-
-Point browser to `http://localhost:3000/server.html` on server.
-Point browser to `http://localhost:3000/client.html` on client.
-Optionally, specify a port by supplying the `PORT` env variable.
 
 
 ## Features
@@ -43,12 +36,4 @@ Optionally, specify a port by supplying the `PORT` env variable.
 - Added Dynamic drawing
 - More basic shapes and dynamic drawing coming next.
 
-###Bugs
-
-Dynamic drawing isn't working as intended on Firefox.
-Recieving works fine, sending redundant junk data.
-
-
-##License
-MIT	
 		

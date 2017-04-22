@@ -19,9 +19,9 @@ canvas{
 	padding:20px;
 	left: 1vw;
 	border: 1px solid gray;
-	background-color: lightskyblue;
+	background-color: white;
 	border-radius: 10px;
-	box-shadow: 2px 2px 12px lightskyblue;
+	box-shadow: 2px 2px 12px gray;
 }
 
 .color{
